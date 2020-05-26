@@ -1,0 +1,35 @@
+{% extends 'base2.html' %}
+
+{% block head %}
+<title>Task Master</title>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    <h1 style="text-align: center">Enter Task</h1>
+
+    <div class="form">
+        <form action="/" method="POST">
+
+            <label for="project">project</label> 
+            <input type="text" name="project" id="project" maxlength="30" />
+         
+            <label for="content">content</label>  
+            <input type="text" name="content" id="content" maxlength="30" />
+
+            <label for="date_start">date_start</label>  
+            <input type="text" name="date_start" id="date_start" maxlength="30" />
+
+            <input type="datetime-local" id="birthdaytime" name="birthdaytime">
+
+
+            <label for="date_end">date_end</label>  
+            <input type="text" name="date_end" id="date_end" maxlength="30" />
+        
+            <button type="reset">Eingaben zurücksetzen</button>
+            <button type="submit">Eingaben absenden</button>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

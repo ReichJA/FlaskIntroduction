@@ -7,19 +7,27 @@
 {% block body %}
 <div class="content">
     <h1 style="text-align: center">Task Master</h1>
-    {% if tasks|length < 1 %}
-    <h4 style="text-align: center">There are no tasks. Create one below!</h4>
-    {% else %}
+
     <table>
         <tr>
-            <th>Task</th>
-            <th>Added</th>
-            <th>Actions</th>
+            <th>Id</th>
+            <th>Project</th>
+            <th>Content</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Difference</th>
+            <th>Change</th>
+
         </tr>
         {% for task in tasks %}
             <tr>
+                <td>{{ task.id }}</td>
+                <td>{{ task.project }}</td>
                 <td>{{ task.content }}</td>
-                <td>{{ task.date_created.date() }}</td>
+                <td>{{ task.date_start }}</td>
+                <td>{{ task.date_end }}</td>
+                <td>{{ task.time }}</td>
+
                 <td>
                     <a href="/delete/{{task.id}}">Delete</a>
                     <br>
@@ -27,14 +35,8 @@
                 </td>
             </tr>
         {% endfor %}
+    
     </table>
-    {% endif %}
 
-    <div class="form">
-        <form action="/" method="POST">
-            <input type="text" name="content" id="content">
-            <input type="submit" value="Add Task">
-        </form>
-    </div>
 </div>
 {% endblock %}

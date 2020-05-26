@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 
 {% block head %}
 <title>Task Master</title>
@@ -10,6 +10,9 @@
 
     <div class="form">
         <form action="/update/{{task.id}}" method="POST">
+            <label for="project">project</label> 
+            <input type="text" name="project" id="project" value="{{task.project}}">
+            <label for="task">task</label> 
             <input type="text" name="content" id="content" value="{{task.content}}">
             <input type="submit" value="Update">
         </form>
