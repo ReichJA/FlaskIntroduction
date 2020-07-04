@@ -11,23 +11,45 @@
     <div class="form">
         <form action="/" method="POST">
 
-            <label for="project">project</label> 
-            <input type="text" name="project" id="project" maxlength="30" />
-         
-            <label for="content">content</label>  
-            <input type="text" name="content" id="content" maxlength="30" />
+            <p>                
+                <label for="project">project</label> 
+                <select name="project">
+                    <option value="{{projects[0].name}}" selected>{{projects[0].name}}</option>
+                    {% for project in projects[1:] %}
+                      <option value="{{project.name}}">{{project.name}}</option>
+                    {% endfor %}
+                </select>
+            </p>
 
-            <label for="date_start">date_start</label>  
-            <input type="text" name="date_start" id="date_start" maxlength="30" />
+            <p>
+                <label for="content">content</label>  
 
-            <input type="datetime-local" id="birthdaytime" name="birthdaytime">
+                <select name="content">
+                    <option value="{{working_types[0].name}}" selected>{{working_types[0].name}}</option>
+                    {% for working_type in working_types[1:] %}
+                        <option value="{{working_type.name}}">{{working_type.name}}</option>
+                    {% endfor %}
+                </select>
+
+            </p>
+
+            
+            <p>
+                <label for="date_start">date_start</label>  
+                <input type="datetime-local" name="date_start" id="date_start"/>
+            </p>
 
 
-            <label for="date_end">date_end</label>  
-            <input type="text" name="date_end" id="date_end" maxlength="30" />
-        
-            <button type="reset">Eingaben zurücksetzen</button>
-            <button type="submit">Eingaben absenden</button>
+            <p>
+                <label for="date_end">date_end</label>  
+                <input type="datetime-local" name="date_end" id="date_end"/>
+            </p>
+
+            <p>
+                <input type="reset" value="Reset"> 
+                <input type="submit" value="Update">
+            </p>
+
         </form>
 
     </div>

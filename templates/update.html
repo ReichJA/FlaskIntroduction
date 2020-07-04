@@ -10,8 +10,41 @@
 
     <div class="form">
         <form action="/update/{{task.id}}" method="POST">
-            <label for="project">project</label> 
-            <input type="text" name="project" id="project" value="{{task.project}}">
+
+            <p>                
+                <label for="project">project</label> 
+                <select name="project">
+                    <option value="{{task.project}}" selected>{{task.project}}</option>
+                    {% for project in projects[0:] %}
+                      <option value="{{project.name}}">{{project.name}}</option>
+                    {% endfor %}
+                </select>
+            </p>
+
+            <p>
+                <label for="content">content</label>  
+
+                <select name="content">
+                    <option value="{{working_types[0].name}}" selected>{{working_types[0].name}}</option>
+                    {% for working_type in working_types[0:] %}
+                        <option value="{{working_type.name}}">{{working_type.name}}</option>
+                    {% endfor %}
+                </select>
+
+            </p>
+
+            
+            <p>
+                <label for="date_start">date_start</label>  
+                <input type="datetime-local" name="date_start" id="date_start"/>
+            </p>
+
+
+            <p>
+                <label for="date_end">date_end</label>  
+                <input type="datetime-local" name="date_end" id="date_end"/>
+            </p>
+
             <label for="task">task</label> 
             <input type="text" name="content" id="content" value="{{task.content}}">
             <input type="submit" value="Update">
