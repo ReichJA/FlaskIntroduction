@@ -1,9 +1,8 @@
 from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-import datetime 
-from test import hello_world
+import datetime
 
-from date_func import calc_datetime_difference, date_format
+from date_func import calc_datetime_difference, date_format, date_to_string
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///time-clock2.db'
@@ -11,11 +10,16 @@ db = SQLAlchemy(app)
 
 class Project_Work(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    project = db.Column(db.String(200), unique=False, nullable=False)   #Project ID
-    content = db.Column(db.String(200), unique=False, nullable=False)   #what have I been working on?
-    date_start = db.Column(db.DateTime, unique=False, nullable=False)   #when did I start my work?
-    date_end = db.Column(db.DateTime, unique=False, nullable=False)     #when did I finish my work?
-    time = db.Column(db.Integer, unique=False, nullable=False)            #how long did it take?
+    project = db.Column(db.String(200), unique=False, nullable=False)       #Project ID
+    content = db.Column(db.String(200), unique=False, nullable=False)       #what have I been working on?
+
+    date_start = db.Column(db.String(10), unique=False, nullable=False)     #when did I start my work?
+    time_start  = db.Column(db.String(6), unique=False, nullable=False)
+    
+    date_end = db.Column(db.String(10), unique=False, nullable=False)       #when did I finish my work?
+    time_end  = db.Column(db.String(6), unique=False, nullable=False)
+
+    time = db.Column(db.Float, unique=False, nullable=False)                #how long did it take?
 
     def __repr__(self):
         return '<Task %r>' % self.id
@@ -70,12 +74,12 @@ def index():
         start = datetime.datetime.strptime(request.form['date_start'], date_format())
         end = datetime.datetime.strptime(request.form['date_end'], date_format())
 
-        # start = datetime.datetime.strptime(request.form['date_end'], '%Y-%m-%dT%H:%M')
-        # end = datetime.datetime.strptime(request.form['date_end'], '%Y-%m-%dT%H:%M')
-
         diff = calc_datetime_difference(start, end)
+        date0 = date_to_string(start)
+        date1 = date_to_string(end)
 
-        new_task = Project_Work(project=project, content=content, date_start = start, date_end = end, time = diff)
+        new_task = Project_Work(project=project, content=content, date_start = date0[0], \
+            time_start = date0[1], date_end = date1[0], time_end = date1[1], time = diff)
 
         try:
             db.session.add(new_task)
