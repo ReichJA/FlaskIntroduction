@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Task Master</title>
+{% endblock %}
+
+{% block body %}
+<div class="content">
+    <h1 style="text-align: center">Task Master</h1>
+
+    <table>
+        <tr>
+            <th>Id</th>
+            <th>Project</th>
+            <th>Content</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Difference</th>
+            <th>Change</th>
+
+        </tr>
+        {% for task in tasks %}
+            <tr>
+                <td>{{ task.id }}</td>
+                <td>{{ task.project }}</td>
+                <td>{{ task.content }}</td>
+                <td>{{ task.date_start }}</td>
+                <td>{{ task.date_end }}</td>
+                <td>{{ task.time }}</td>
+
+                <td>
+                    <a href="/delete/{{task.id}}">Delete</a>
+                    <br>
+                    <a href="/update/{{task.id}}">Update</a>
+                </td>
+            </tr>
+        {% endfor %}
+    
+    </table>
+
+</div>
+{% endblock %}
