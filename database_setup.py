@@ -27,11 +27,11 @@ class Project_Work(Base):
     #what have I been working on?       
     content = Column(String(200), unique=False, nullable=False)       
     #when did I start my work?
-    date_start = Column(String(10), unique=False, nullable=False)     
-    time_start  = Column(String(6), unique=False, nullable=False)
+    date_start = Column(String(16), unique=False, nullable=False)     
+    #time_start  = Column(String(6), unique=False, nullable=False)
     #when did I finish my work?
-    date_end = Column(String(10), unique=False, nullable=False)       
-    time_end  = Column(String(6), unique=False, nullable=False)
+    date_end = Column(String(16), unique=False, nullable=False)       
+    #time_end  = Column(String(6), unique=False, nullable=False)
     #how long did it take?
     time = Column(Float, unique=False, nullable=False) 
 

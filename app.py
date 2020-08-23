@@ -3,7 +3,8 @@ from flask import Flask, render_template, url_for, request, redirect
 from date_func import calc_datetime_difference, date_format, date_to_string
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
+
 from database_setup import Base, Project_Work, Projects, Working_Type
 
 import datetime
@@ -12,13 +13,17 @@ app = Flask(__name__)
 
 # Connect to Database and create database session
 engine = create_engine('sqlite:///time-clock2.db')
-Base.metadata.bind = engine
 
-DBSession = sessionmaker(bind=engine)
-db = DBSession()
+session_factory =scoped_session(sessionmaker(autocommit=False, bind=engine))
+Session = scoped_session(session_factory)
+
+db = Session()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    db.query('project_work')
+    print(db)
+
     if request.method == 'POST':
 
         project = request.form['project']
@@ -28,15 +33,17 @@ def index():
         end = datetime.datetime.strptime(request.form['date_end'], date_format())
 
         diff = calc_datetime_difference(start, end)
-        date0 = date_to_string(start)
-        date1 = date_to_string(end)
+        # date0 = date_to_string(start)
+        # date1 = date_to_string(end)
 
-        new_task = Project_Work(project=project, content=content, date_start = date0[0], \
-            time_start = date0[1], date_end = date1[0], time_end = date1[1], time = diff)
+        new_task = Project_Work(project=project, content=content, date_start = request.form['date_start'], \
+            date_end = request.form['date_end'], time = diff)
 
         try:
             db.add(new_task)
             db.commit()
+            db.remove()
+
             return redirect('/')
 
         except:
@@ -45,26 +52,30 @@ def index():
     else:
 
         tasks = db.query(Project_Work).all()
-
         return render_template("index.html", tasks=tasks)
     
 
 
 @app.route('/form')
 def form():
-    projects = db.query(Projects).all()
-    working_types = db.query(Working_Type).all()
-    print(working_types)
+
+    print(db)
+    projects = db.query('projects')
+    working_types = db.query('working_type')
+
     return render_template('form.html', projects = projects, working_types = working_types)
 
 
 @app.route('/delete/<int:id>')
 def delete(id):
-    task_to_delete = db.query(Project_Work).filter_by(id=id).first() 
+    print(db)
 
+    task_to_delete = db.query(Project_Work).filter_by(id=id).first()
     try:
         db.delete(task_to_delete)
         db.commit()
+        db.remove()
+
         return redirect('/')
     except:
         return 'There was a problem deleting that task'
@@ -74,20 +85,21 @@ def delete(id):
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
     
-    projects = db.query(Projects).all()
+    projects = db.query('Projects').all()
     working_types = db.query(Working_Type).all()
     
-    task = db.query(Project_Work).filter_by(id=id).first() 
+    task = db.query(Project_Work).filter_by(id=id).first()
 
     if request.method == 'POST':
-        task.project = request.form['project']
-        task.content = request.form['content']
+        project = request.form['project']
+        content = request.form['content']
 
-        try:
-            db.session.commit()
-            return redirect('/')
-        except:
-            return 'There was an issue updating your task'
+        db.update(Project_Work).where(id=id).\
+            value(project=project, content=content)
+
+        db.commit()
+        
+        return redirect('/')
 
     else:
         return render_template('update.html', task=task, projects = projects, working_types = working_types)

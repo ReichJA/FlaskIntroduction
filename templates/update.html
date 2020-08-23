@@ -21,28 +21,26 @@
                 </select>
             </p>
 
-            <p>
-                <label for="content">content</label>  
-
+            <p>                
+                <label for="content">content</label> 
                 <select name="content">
-                    <option value="{{working_types[0].name}}" selected>{{working_types[0].name}}</option>
+                    <option value="{{working_types[0].name}}" selected>{{task.content}}</option>
                     {% for working_type in working_types[0:] %}
-                        <option value="{{working_type.name}}">{{working_type.name}}</option>
+                      <option value="{{working_type.name}}">{{working_type.name}}</option>
                     {% endfor %}
                 </select>
-
             </p>
 
             
             <p>
                 <label for="date_start">date_start</label>  
-                <input type="datetime-local" name="date_start" id="date_start"/>
+                <input type="datetime-local" name="date_start" value="{{task.date_start}}" id="date_start"/>
             </p>
 
 
             <p>
                 <label for="date_end">date_end</label>  
-                <input type="datetime-local" name="date_end" id="date_end"/>
+                <!-- <input type="datetime-local" name="date_end" value="{{task.date_end}}" id="date_end"/> -->
             </p>
 
             <label for="task">task</label> 
